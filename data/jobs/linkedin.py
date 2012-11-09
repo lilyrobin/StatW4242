@@ -21,7 +21,11 @@ client = oauth.Client(consumer, access_token)
 # Make call to LinkedIn to retrieve your own profile
 #resp,content = client.request("http://api.linkedin.com/v1/people/~?format=json", "GET", "")
 
-resp,content = client.request("http://api.linkedin.com/v1/jobs/1337:(id,company,posting-date)", "GET", "")
+#resp,content = client.request("http://api.linkedin.com/v1/jobs/1337:(id,company,posting-date)", "GET", "")
+
+
+response,content = client.request("http://api.linkedin.com/v1/jobs/1337:(id,customer-job-code,active,posting-date,expiration-date,posting-timestamp,company:(id,name),position:(title,location,job-functions,industries,job-type,experience-level),skills-and-experience,description-snippet,description,salary,job-poster:(id,first-name,last-name,headline),referral-bonus,site-job-url,location-description)?format=json", "GET", "")
+
 
 print content
  
