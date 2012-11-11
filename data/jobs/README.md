@@ -2,13 +2,15 @@ Job Search Scrappin
 ===================
 
 
-1. Sign up for a developer key with careerbuilder and linkedin:
+1. Sign up for a developer key with linkedin:
 
-http://api.careerbuilder.com/RequestDevKey.aspx
 https://www.linkedin.com/secure/developer
 
 
-2. Get the scripts and execute them
+2. Get the script and execute it replacing the keys with your own:
 
-career_builder.py
-linkedin.py
+```bash
+
+python linkedin.py 'api_key' 'secret_key' 'user_token' 'user_secret'
+
+```

@@ -1,6 +1,7 @@
 import oauth2 as oauth
 import httplib2
-import time, os, simplejson, sys
+import time, os, sys
+import simplejson as json
  
 # Fill the keys and secrets you retrieved after registering your app
 api_key = sys.argv[1]
@@ -21,7 +22,13 @@ client = oauth.Client(consumer, access_token)
 # Make call to LinkedIn
 #response,content = client.request("http://api.linkedin.com/v1/jobs/1337:(id,customer-job-code,active,posting-date,expiration-date,posting-timestamp,company:(id,name),position:(title,location,job-functions,industries,job-type,experience-level),skills-and-experience,description-snippet,description,salary,job-poster:(id,first-name,last-name,headline),referral-bonus,site-job-url,location-description)?format=json", "GET", "")
 
-response,content = client.request("http://api.linkedin.com/v1/job-search?job-title=Data+Scientist", "GET", "")
+request_url = "http://api.linkedin.com/v1/job-search:(jobs:(id,customer-job-code,active,posting-date,expiration-date,posting-timestamp,expiration-timestamp,company:(id,name),position:(title,location,job-functions,industries,job-type,experience-level),skills-and-experience,description-snippet,description,salary,job-poster:(id,first-name,last-name,headline),referral-bonus,site-job-url,location-description))?format=json&job-title=Data+Scientist"
+
+response,content = client.request(request_url, "GET", "")
+
+content_json = json.loads(content)
+
+total = content_json["jobs"]["_total"]
 
 print content
  
