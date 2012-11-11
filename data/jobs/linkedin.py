@@ -20,18 +20,12 @@ access_token = oauth.Token(
 client = oauth.Client(consumer, access_token)
  
 # Make call to LinkedIn
-#response,content = client.request("http://api.linkedin.com/v1/jobs/1337:(id,customer-job-code,active,posting-date,expiration-date,posting-timestamp,company:(id,name),position:(title,location,job-functions,industries,job-type,experience-level),skills-and-experience,description-snippet,description,salary,job-poster:(id,first-name,last-name,headline),referral-bonus,site-job-url,location-description)?format=json", "GET", "")
 
-request_url = "http://api.linkedin.com/v1/job-search:(jobs:(id,customer-job-code,active,posting-date,expiration-date,posting-timestamp,expiration-timestamp,company:(id,name),position:(title,location,job-functions,industries,job-type,experience-level),skills-and-experience,description-snippet,description,salary,job-poster:(id,first-name,last-name,headline),referral-bonus,site-job-url,location-description))?format=json&job-title=Data+Scientist"
+max_requests = 300
+count_increment = 20
 
-response,content = client.request(request_url, "GET", "")
+request_url = "http://api.linkedin.com/v1/job-search:(jobs:(id,customer-job-code,active,posting-date,expiration-date,posting-timestamp,expiration-timestamp,company:(id,name),position:(title,location,job-functions,industries,job-type,experience-level),skills-and-experience,description-snippet,description,salary,job-poster:(id,first-name,last-name,headline),referral-bonus,site-job-url,location-description))?format=json&count=20&keywords=data+science&sort=DD&start="
 
-content_json = json.loads(content)
-
-total = content_json["jobs"]["_total"]
-
-print content
- 
-# By default, the LinkedIn API responses are in XML format. If you prefer JSON, simply specify the format in your call
-# resp,content = client.request(""http://api.linkedin.com/v1/people/~?format=json", "GET", {})
-
+for i in range(max_requests):
+  response,content = client.request(request_url + str(i * count_increment), "GET", "")
+  print content.replace("\n", " ")

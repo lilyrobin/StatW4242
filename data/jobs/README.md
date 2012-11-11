@@ -12,5 +12,4 @@ https://www.linkedin.com/secure/developer
 ```bash
 
 python linkedin.py 'api_key' 'secret_key' 'user_token' 'user_secret'
-
 ```
