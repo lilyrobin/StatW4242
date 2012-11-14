@@ -43,8 +43,8 @@ for(i in 1:jobFunctions.ds.len) {
 }
 
 jobFunctions.ds.df <- data.frame(table(jobFunctions.ds.result))
-names(jobFunctions.ds.df) <- c("Skills", "Percentage")
-jobFunctions.ds.df$Percentage <- jobFunctions.ds.df$Percentage / length(jobFunctions.ds.result)
+names(jobFunctions.ds.df) <- c("Job_Functions", "Percentage_Of_Total")
+jobFunctions.ds.df$Percentage_Of_Total <- jobFunctions.ds.df$Percentage_Of_Total / length(jobFunctions.ds.result)
 jobFunctions.ds.df$Career <- array(data="Data Scientist", dim=nrow(jobFunctions.ds.df))
 
 jobFunctions.stat <- apply(as.array(stat$position_jobFunctions_values), 1, fromJSON)
@@ -58,13 +58,24 @@ for(i in 1:jobFunctions.stat.len) {
 }
 
 jobFunctions.stat.df <- data.frame(table(jobFunctions.stat.result))
-names(jobFunctions.stat.df) <- c("Skills", "Percentage")
-jobFunctions.stat.df$Percentage <- jobFunctions.stat.df$Percentage / length(jobFunctions.stat.result)
+names(jobFunctions.stat.df) <- c("Job_Functions", "Percentage_Of_Total")
+jobFunctions.stat.df$Percentage_Of_Total <- jobFunctions.stat.df$Percentage_Of_Total / length(jobFunctions.stat.result)
 jobFunctions.stat.df$Career <- array(data="Statistician", dim=nrow(jobFunctions.stat.df))
 
 jobFunctions <- rbind(jobFunctions.ds.df, jobFunctions.stat.df)
-jobFunctions.sig <- jobFunctions[which(jobFunctions$Percentage > 0.1),]
-jobFunctions.sig <- jobFunctions.sig[order(jobFunctions.sig),]
+jobFunctions.sig <- jobFunctions[which(jobFunctions$Percentage_Of_Total > 0.1),]
+jobFunctions.sig <- jobFunctions.sig[order(jobFunctions.sig$Percentage_Of_Total, decreasing=T),]
 
-ggplot(, aes(x=Skills, y=Percentage, fill=Career)) + 
-  geom_bar(stat="identity", position=position_dodge())
+jobFunctions.sig$Job_Functions <- factor(jobFunctions.sig$Job_Functions,
+                          levels=c("Information Technology", "Engineering", "Analyst", "Research", "Science"),
+                    ordered=TRUE)
+
+# colors from http://wiki.stdout.org/rcookbook/Graphs/Colors%20(ggplot2)/
+ggplot(jobFunctions.sig, aes(x=Job_Functions, y=Percentage_Of_Total, fill=Career)) + 
+  geom_bar(stat="identity", alpha=0.5, position="identity") +
+  xlab("Job Functions") +
+  ylab("% of Total Postings") +
+  ggtitle("Data Scientist and Statistician Skills Comparison") +
+  theme(legend.position="bottom", panel.background=element_rect("white"), text=element_text(size=20)) +
+  scale_fill_manual(values=c("#66CC99", "#9999CC")) 
+  theme_get()
