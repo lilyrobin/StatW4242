@@ -24,5 +24,15 @@ python linkedin.py 'api_key' 'secret_key' 'user_token' 'user_secret' > raw_outpu
 
 ```bash
 
-python transform_linkedin.py 'raw_output.json' > linkedin_jobs.json &
+python linkedin_to_tsv.py 'raw_output.json' > linkedin_jobs.tsv &
+```
+
+4. Load the data into an R dataframe.
+
+```R
+
+ds <- read.delim(file="data/jobs/linkedin_ds.tsv",
+                 stringsAsFactors=FALSE,
+                 quote="",
+                 fill=FALSE)
 ```
