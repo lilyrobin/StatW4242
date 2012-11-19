@@ -4,6 +4,7 @@ import types
 import re
 import simplejson as json
 import sys
+import fileinput
 
 fields = (
   ('id',),
@@ -29,7 +30,6 @@ fields = (
   ('position','experienceLevel','code'),
   ('position','experienceLevel','name'),
   ('skillsAndExperience',),
-  ('descriptionSnippet',),
   ('description',),
   ('salary',),
   ('jobPoster','id'),
@@ -41,7 +41,6 @@ fields = (
   ('locationDescription',)
 )
 
-filename = sys.argv[1]
 null_value = "NA"
 r = [null_value] * len(fields)
 blank_literal = re.compile('[\t\r\n]')
@@ -99,17 +98,21 @@ def print_header(field):
 
 print("\t".join(map(print_header,fields)))
 
-for line in file(filename):
-  i = 0
-  r = [null_value] * len(fields)
+for line in fileinput.input():
 
-  parsed_line = json.loads(line)
+  try:
+    jobs = json.loads(line)["jobs"]["values"]
+  except KeyError:
+    pass
 
-  for field in fields:
-    try:
-      r[i] = nested_get(parsed_line, field)
-    except KeyError:
-      pass
-    i = i + 1
+  for job in jobs:
+    i = 0
+    r = [null_value] * len(fields)
+    for field in fields:
+      try:
+        r[i] = nested_get(job, field)
+      except KeyError:
+        pass
+      i = i + 1
 
-  print("\t".join(map(print_json,r)))  
+    print("\t".join(map(print_json,r)))
