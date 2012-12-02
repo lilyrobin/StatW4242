@@ -21,12 +21,12 @@ client = oauth.Client(consumer, access_token)
  
 # Make call to LinkedIn
 
-max_requests = 6
+max_requests = 33
 count_increment = 20
 offset = 0
 
-request_url = "http://api.linkedin.com/v1/job-search:(jobs:(id,customer-job-code,active,posting-date,expiration-date,posting-timestamp,expiration-timestamp,company:(id,name),position:(title,location,job-functions,industries,job-type,experience-level),skills-and-experience,description,salary,job-poster:(id,first-name,last-name,headline),referral-bonus,site-job-url,location-description))?format=json&count=20&keywords=%22data%20science%22&sort=DD&start="
+request_url = "http://api.linkedin.com/v1/job-search:(jobs:(id,customer-job-code,active,posting-date,expiration-date,posting-timestamp,expiration-timestamp,company:(id,name),position:(title,location,job-functions,industries,job-type,experience-level),skills-and-experience,description,salary,job-poster:(id,first-name,last-name,headline),referral-bonus,site-job-url,location-description))?format=json&count=20&keywords=data%20scientist&sort=DD&start="
 
 for i in range(max_requests):
   response,content = client.request(request_url + str(offset + i * count_increment), "GET", "")
-  print content.replace("\n", " ")
+  print content.replace("\n", " ").replace("\t", " ")
